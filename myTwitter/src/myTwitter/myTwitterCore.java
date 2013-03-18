@@ -3,16 +3,14 @@
  * and open the template in the editor.
  */
 package myTwitter;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import twitter4j.ResponseList;
+import twitter4j.Status;
 
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
 
 /**
  *
@@ -35,23 +33,18 @@ public class myTwitterCore {
 
             twitter.setOAuthAccessToken(oathAccessToken);
             // end of difference
-
-            twitter.updateStatus(tweet);
-
+            
+            if(tweet.length() > 0){
+                twitter.updateStatus(tweet);
+            }
             //System.out.println("\nMy Timeline:");
 
             // I'm reading your timeline
             ResponseList list = twitter.getHomeTimeline();
-            return list;
+            
             //System.out.println("Lista: " + list);
-
-
-            /*for (Status each : list) {
-
-                System.out.println("Sent by: @" + each.getUser().getScreenName()
-                 + " - " + each.getUser().getName() + "\n" + each.getText()
-                 + "\n");
-            }*/
+            
+            return list;
 
     }
 
@@ -72,6 +65,11 @@ public class myTwitterCore {
     
     public ResponseList tweetaction(String tweet) throws Exception{
         ResponseList var = new myTwitterCore().start(tweet);
+        return var;
+    }
+    
+    public ResponseList loadTL() throws Exception{
+        ResponseList var = new myTwitterCore().start("");
         return var;
     }
 }

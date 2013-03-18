@@ -4,20 +4,40 @@
  */
 package myTwitter;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import twitter4j.ResponseList;
+import twitter4j.Status;
 
 /**
  *
  * @author wbarahona
  */
 public class myTwitter extends javax.swing.JFrame {
-
-    /**
+    DefaultListModel list = new DefaultListModel();
+    /** 
      * Creates new form myTwitter
      */
     public myTwitter() {
         initComponents();
+        myTwitterCore TWCoreBase = new myTwitterCore();
+        try{
+            ResponseList var = TWCoreBase.loadTL();
+            
+            
+            for (Object each : var)
+            {
+                 Status s = (Status) each;
+                 //System.out.println("Sent by: @" + s.getUser().getScreenName()+ " - " + s.getUser().getName() + "\n" + s.getText()+ "\n");
+                 
+                 list.addElement("@"+s.getUser().getScreenName()+ " - " + s.getUser().getName() + "\n" + s.getText()+ "\n\n\n");
+                 TLlist.setModel(list);
+            }
+            
+        }
+        catch(Exception exception){
+            JOptionPane.showMessageDialog(null, "Whoa there Tex! "+exception);
+        }
     }
 
     /**
@@ -32,10 +52,10 @@ public class myTwitter extends javax.swing.JFrame {
         TweetText = new javax.swing.JTextField();
         jToggleButton1 = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        gifLabel = new javax.swing.JLabel();
+        TLlist = new javax.swing.JList();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(153, 204, 255));
 
         TweetText.setToolTipText("");
 
@@ -47,17 +67,7 @@ public class myTwitter extends javax.swing.JFrame {
             }
         });
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
-
-        gifLabel.setText("GIF");
-        gifLabel.setMaximumSize(new java.awt.Dimension(48, 48));
-        gifLabel.setMinimumSize(new java.awt.Dimension(48, 48));
-        gifLabel.setPreferredSize(new java.awt.Dimension(48, 48));
+        jScrollPane1.setViewportView(TLlist);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -68,22 +78,16 @@ public class myTwitter extends javax.swing.JFrame {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(org.jdesktop.layout.GroupLayout.LEADING, TweetText)
                     .add(layout.createSequentialGroup()
-                        .add(0, 307, Short.MAX_VALUE)
+                        .add(0, 917, Short.MAX_VALUE)
                         .add(jToggleButton1))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 88, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(gifLabel, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 285, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .add(0, 0, Short.MAX_VALUE)))
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane1))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
-                    .add(gifLabel, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(TweetText, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -102,8 +106,17 @@ public class myTwitter extends javax.swing.JFrame {
         
         try{
             ResponseList var = TWCoreBase.tweetaction(TweetText.getText());
-            System.out.println("Timeline:"+var);
-            gifLabel.setText(var.toString());
+            
+            
+            for (Object each : var)
+            {
+                 Status s = (Status) each;
+                 //System.out.println("Sent by: @" + s.getUser().getScreenName()+ " - " + s.getUser().getName() + "\n" + s.getText()+ "\n");
+                 
+                 list.addElement("@"+s.getUser().getScreenName()+ " - " + s.getUser().getName() + "\n" + s.getText()+ "\n\n\n");
+                 TLlist.setModel(list);
+            }
+            
         }
         catch(Exception exception){
             JOptionPane.showMessageDialog(null, "Whoa there Tex! "+exception);
@@ -146,9 +159,8 @@ public class myTwitter extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList TLlist;
     private javax.swing.JTextField TweetText;
-    private javax.swing.JLabel gifLabel;
-    private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToggleButton jToggleButton1;
     // End of variables declaration//GEN-END:variables
